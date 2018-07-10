@@ -14,19 +14,14 @@ describe("routes : static", () => {
     });
   });
 
-    describe("GET /marco", () => {
-      it("should return status code 200", (done) => {
-        request.get('http://localhost:3000/marco', (err, res, body) => {
-          expect(res.statusCode).toBe(200);
+  describe("GET /about", () => {
+    it("should return string 'About us' and should return status code 200", (done) => {
+      request.get(base, (err, res, body) => {
+        expect(res.statusCode).toBe(200);
+        expect(body).toContain('About us');
 
-          done();
-      });
-});
-     it("should return string 'Polo' ", (done) => {
-       request.get('http://localhost:3000/marco', (err, res, body) => {
-          expect(body).toContain('Polo');
+        done();
 
-         done();
 
        });
      });
