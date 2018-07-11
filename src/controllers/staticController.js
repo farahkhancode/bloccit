@@ -4,8 +4,7 @@ module.exports = {
   },
 
   about(req, res, next){
-    res.render("static/partials/about", {title: "About us"});
+    res.render("static/partials/about");
   }
-
 
 }
