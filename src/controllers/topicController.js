@@ -7,13 +7,14 @@ module.exports = {
   topicQueries.getAllTopics((err, topics) => {
 
 //#3
-       if(err){
+      if(err){
+         console.log(err); 
          res.redirect(500, "static/index");
-       } else {
+} else {
          res.render("topics/index", {topics});
-       }
-     })
-  },
+            }
+      })
+},
   new(req, res, next){
       res.render("topics/new");
   },
