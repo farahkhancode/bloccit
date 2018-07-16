@@ -9,28 +9,25 @@ describe("Topic", () => {
         this.post;
         sequelize.sync({force: true}).then((res) => {
 
-            Topic.create({
-                title: "Favorite movies",
-                description: "Lets discuss our favorite movies"
-                posts: [{
+          Topic.create({
+        title: "Favorite movies",
+        description: "Lets discuss our favorite movies",
+          posts: [{
             title: "National Treasure",
             body: "Best movie ever.",
-            userId: this.user.id
-          }]
-            })
-            .then((topic) => {
-                this.topic = topic;
-
-                Post.create({
-                    title: "National Treasure",
-                    body: "Best movie ever.",
-                    topicId: this.topic.id
-                })
-                .then((post) => {
-                    this.post = post;
-                    done();
-                });
-            })
+           userId: this.user.id
+         }]
+         }, {
+          include: {
+            model: Post,
+            as: "posts"
+        })
+    .then((topic) => {
+        this.topic = topic; //store the topic
+        this.post = topic.posts[0]; //store the pos
+            done();
+        });
+    })
             .catch((err) => {
                 console.log(err);
                 done();
