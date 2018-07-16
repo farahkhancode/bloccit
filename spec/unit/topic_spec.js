@@ -12,13 +12,18 @@ describe("Topic", () => {
             Topic.create({
                 title: "Favorite movies",
                 description: "Lets discuss our favorite movies"
+                posts: [{
+            title: "National Treasure",
+            body: "Best movie ever.",
+            userId: this.user.id
+          }]
             })
             .then((topic) => {
                 this.topic = topic;
 
                 Post.create({
                     title: "National Treasure",
-                    body: "Best movie ever.'",
+                    body: "Best movie ever.",
                     topicId: this.topic.id
                 })
                 .then((post) => {
