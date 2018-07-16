@@ -67,11 +67,10 @@ describe("Topic", () => {
     describe("#getPosts()", () => {
         it("should return the associated posts with title and body for a topic", (done) => {
 
-          this.topic.getPosts().then(associatedPost => {
-       expect(associatedPost[0].title).toBe("National Treasure");
-       expect(associatedPost[0].body).toBe(
-         "Best movie ever."
-       );
+       this.topic.getPosts()
+       .then((posts) => {
+       expect(posts[0].title).toBe("National Treasure");
+       expect(posts[0].body).toBe("Best movie ever.");
        done();
             });
         });
