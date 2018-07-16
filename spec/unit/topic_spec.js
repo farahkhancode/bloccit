@@ -18,7 +18,7 @@ describe("Topic", () => {
 
                 Post.create({
                     title: "National Treasure",
-                    body: "Best movie ever.'",
+                    body: "Best movie ever.",
                     topicId: this.topic.id
                 })
                 .then((post) => {
@@ -70,7 +70,7 @@ describe("Topic", () => {
           this.topic.getPosts().then(associatedPost => {
        expect(associatedPost[0].title).toBe("National Treasure");
        expect(associatedPost[0].body).toBe(
-         "Best movie ever."
+        "Best movie ever."
        );
        done();
             });
