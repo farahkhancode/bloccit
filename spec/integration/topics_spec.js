@@ -29,19 +29,19 @@ describe("routes : topics", () => {
    });
 
 
-  describe("GET /topics", () => {
-    it("should return a status code 200 and all topics", (done) => {
+   describe("GET /topics", () => {
+     it("should return a status code 200 and all topics", (done) => {
 
-   //#3
-          request.get(base, (err, res, body) => {
-            expect(res.statusCode).toBe(200);
-            expect(err).toBeNull();
-            expect(body).toContain("Topics");
-            expect(body).toContain("JS Frameworks");
-            done();
-          });
-        });
-  });
+       //#3
+       request.get(base, (err, res, body) => {
+         expect(res.statusCode).toBe(200);
+         expect(err).toBeNull();
+         expect(body).toContain("Topics");
+         expect(body).toContain("JS Frameworks");
+         done();
+       });
+     });
+   });
 
   describe("GET /topics/new", () => {
 
@@ -162,8 +162,7 @@ describe("routes : topics", () => {
              console.log(err);
              done();
            });
-         }
-       );
+         });
      });
    });
 

@@ -37,18 +37,89 @@ describe("routes : posts", () => {
         });
       });
     });
+    describe("POST /topics/:topicId/posts/:id/destroy", () => {
 
-    describe("GET /topics/:topicId/posts/new", () => {
+    it("should delete the post with the associated ID", (done) => {
 
-       it("should render a new post form", (done) => {
-         request.get(`${base}/${topic.id}/posts/new`, (err, res, body) => {
-           expect(err).toBeNull();
-           expect(body).toContain("New Post");
-           done();
-         });
+//#1
+      expect(post.id).toBe(1);
+
+      request.post(`${base}/${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
+
+//#2
+        Post.findById(1)
+        .then((post) => {
+          expect(err).toBeNull();
+          expect(post).toBeNull();
+          done();
+        })
+      });
+
+    });
+
+  });
+  describe("POST /topics/:topicId/posts/:id/update", () => {
+
+     it("should return a status code 302", (done) => {
+       request.post({
+         url: `${base}/${topic.id}/posts/${post.id}/update`,
+         form: {
+           title: "Snowman Building Competition",
+           body: "I love watching them melt slowly."
+         }
+       }, (err, res, body) => {
+         expect(res.statusCode).toBe(302);
+         done();
        });
-
      });
+
+     it("should update the post with the given values", (done) => {
+         const options = {
+           url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
+           form: {
+             title: "Snowman Building Competition"
+           }
+         };
+         request.post(options,
+           (err, res, body) => {
+
+           expect(err).toBeNull();
+
+           Post.findOne({
+             where: {id: this.post.id}
+           })
+           .then((post) => {
+             expect(post.title).toBe("Snowman Building Competition");
+             done();
+           });
+         });
+     });
+
+   });
+  describe("GET /topics/:topicId/posts/:id/edit", () => {
+
+    it("should render a view with an edit post form", (done) => {
+      request.get(`${base}/${this.topic.id}/posts/${this.post.id}/edit`, (err, res, body) => {
+        expect(err).toBeNull();
+        expect(body).toContain("Edit Post");
+        expect(body).toContain("Snowball Fighting");
+        done();
+      });
+    });
+
+  });
+
+    describe("GET /topics/:topicId/posts/:id", () => {
+
+         it("should render a view with the selected post", (done) => {
+           request.get(`${base}/${this.topic.id}/posts/${this.post.id}`, (err, res, body) => {
+             expect(err).toBeNull();
+             expect(body).toContain("Snowball Fighting");
+             done();
+           });
+         });
+
+       });
 
   });
 
