@@ -3,21 +3,21 @@ module.exports = (sequelize, DataTypes) => {
   var Banner = sequelize.define('Banner', {
     source: DataTypes.STRING,
     description: DataTypes.STRING,
-    topicId: {
+   topicId: {
      type: DataTypes.INTEGER,
      onDelete: "CASCADE",
      references: {
-       model: "Topic",
+       model: "Topics",
        key: "id",
-       as: "topicId",
+       as: "topicId"
      }
    }
   }, {});
   Banner.associate = function(models) {
     // associations can be defined here
     Banner.belongsTo(models.Topic, {
-      foreignKey: "topicId",
-      onDelete: "CASCADE",
+       foreignKey: "topicId",
+       onDelete: "CASCADE"
     });
   };
   return Banner;
