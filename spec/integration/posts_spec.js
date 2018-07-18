@@ -52,6 +52,35 @@ describe("routes : posts", () => {
 
   describe("POST /topics/:topicId/posts/create", () => {
 
+
+    it("should not create a new post that fails validations", (done) => {
+      const options = {
+        url: `${base}/${this.topic.id}/posts/create`,
+        form: {
+
+//#1
+          title: "a",
+          body: "b"
+        }
+      };
+
+      request.post(options,
+        (err, res, body) => {
+
+//#2
+          Post.findOne({where: {title: "a"}})
+          .then((post) => {
+              expect(post).toBeNull();
+              done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+        }
+      );
+    });
+
     it("should create a new post and redirect", (done) => {
         const options = {
             url: `${base}/${this.topic.id}/posts/create`,
@@ -122,7 +151,6 @@ describe("routes : posts", () => {
   });
 
   describe("POST /topics/:topicId/posts/:id/update", () => {
-
     it("should return a status code 302", (done) => {
       request.post({
         url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
@@ -150,7 +178,7 @@ describe("routes : posts", () => {
             where: {id: this.post.id}
           })
           .then((post) => {
-            expect(post.title).toBe("Snowman Building Competition");
+            expect(post.title).toBe("Snowball Fighting");
             done();
           });
         });
