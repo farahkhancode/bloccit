@@ -3,44 +3,51 @@ const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
 const User = require("../../src/db/models").User;
 
+
 describe("Topic", () => {
 
   beforeEach((done) => {
-       this.topic;
-       this.post;
-       this.user;
+    this.topic;
+    this.post;
+    this.user;
 
-       sequelize.sync({force: true}).then((res) => {
+    sequelize.sync({force: true}).then((res) => {
 
-         User.create({
-           email: "starman@tesla.com",
-           password: "Trekkie4lyfe"
-         })
-         .then((user) => {
-           this.user = user;
+// #2
+      User.create({
+        email: "starman@tesla.com",
+        password: "Trekkie4lyfe"
+      })
+      .then((user) => {
+        this.user = user; //store the user
 
-           Topic.create({
-             title: "Expeditions to Alpha Centauri",
-             description: "A compilation of reports from recent visits to the star system.",
-             posts: [{
-               title: "National Treasure",
-               body: "Best movie ever.",
-               userId: this.user.id
-             }]
-           }, {
-             include: {
-               model: Post,
-               as: "posts"
-             }
-           })
-           .then((topic) => {
-             this.topic = topic;
-             this.post = topic.posts[0];
-             done();
-           })
-         })
-       });
-     });
+// #3
+        Topic.create({
+          title: "Expeditions to Alpha Centauri",
+          description: "A compilation of reports from recent visits to the star system.",
+
+// #4
+          posts: [{
+            title: "My first visit to Proxima Centauri b",
+            body: "I saw some rocks.",
+            userId: this.user.id
+          }]
+        }, {
+
+// #5
+          include: {
+            model: Post,
+            as: "posts"
+          }
+        })
+        .then((topic) => {
+          this.topic = topic; //store the topic
+          this.post = topic.posts[0]; //store the post
+          done();
+        })
+      })
+    });
+  });
 
     describe("#create()", () => {
         it("should create a topic object with a title and description", (done) => {
@@ -78,8 +85,8 @@ describe("Topic", () => {
 
        this.topic.getPosts()
        .then((posts) => {
-       expect(posts[0].title).toBe("National Treasure");
-       expect(posts[0].body).toBe("Best movie ever.");
+       expect(posts[0].title).toBe("My first visit to Proxima Centauri b");
+       expect(posts[0].body).toBe("I saw some rocks.");
        done();
             });
         });

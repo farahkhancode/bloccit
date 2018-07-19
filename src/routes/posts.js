@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const postController = require("../controllers/postController");
 const validation = require("./validation");
 const helper = require("../auth/helpers");
