@@ -1,4 +1,3 @@
-const Flair = require("./models").Flair;
 const Post = require("./models").Post;
 const Topic = require("./models").Topic;
 const Comment = require("./models").Comment;
@@ -19,19 +18,14 @@ module.exports = {
       getPost(id, callback){
 
         return Post.findById(id, {
-               include: [
-                 {model: Comment, as: "comments", include: [
-                   {model: User }
-                 ]}
-               ]
+               include: [{
+                 model: Comment,
+                 as: "comments",
+               include: [{
+                 model: User
+               }]
+             }]
              })
-
-        /*return Post.findById(id, {
-          include: [{
-            model: Flair,
-            as: "flairs",
-          }]
-        })*/
         .then((post) => {
           callback(null, post);
         })

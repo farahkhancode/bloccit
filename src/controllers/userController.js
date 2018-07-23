@@ -5,7 +5,7 @@ const userQueries = require("../db/queries.users.js");
 
 module.exports = {
 
-  
+
   signUp(req, res, next){
     res.render("users/sign_up");
   },

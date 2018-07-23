@@ -8,18 +8,14 @@
 
     <main class="container">
       <% include ../static/partials/messages.ejs %>
-
       <h1><%= post.title %></h1>
       <a href="/topics/<%= post.topicId %>/posts/<%= post.id %>/edit" class="btn btn-warning">Edit</a>
-      <a href="/topics/<%= post.topicId %>/posts/<%= post.id %>/flairs/new" class="btn btn-success">New Flair</a>
-      <form style="display:initial" action="/topics/<%= post.topicId %>/posts/<%= post.id %>/destroy" method="post">
-        <button type="submit" class="btn btn-danger">Delete</button>
-      </form>
-
+        <form style="display:initial" action="/topics/<%= post.topicId %>/posts/<%= post.id %>/destroy" method="post">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       <p><%= post.body %></p>
 
       <section id="comment-form">
-
  <!-- #1 -->
     <% if(currentUser) { %>
       <% include ../comments/new.ejs %>
@@ -37,17 +33,6 @@
     <% } %>
    </section>
 
-      <hr>
-
-      <h2>Flairs</h2>
-      <ul class-"list-group">
-        <% post.flairs.forEach((flair) => { %>
-          <li class="list-group-item">
-            <a href="/topics/<%= post.topicId %>/posts/<%= post.id %>/flairs/<% flair.id %>"
-              style="background-color:<%= flair.color %>"> <%= flair.name %></a>
-          </li>
-       <% }) %>
-      </ul>
     </main>
 
     <% include ../static/partials/baseScripts.ejs %>
