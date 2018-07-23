@@ -46,6 +46,149 @@ describe("routes : posts", () => {
 
   });
 
+//define the guest user context
+  describe("guest user performing CRUD actions for Post", () => {
+
+   // #4: Send mock request and authenticate as a member user
+       beforeEach((done) => {
+         request.get({
+           url: "http://localhost:3000/auth/fake",
+           form: {
+             role: "guest"
+           }
+         },
+           (err, res, body) => {
+             done();
+           }
+         );
+       });
+
+  describe("GET /topics/:topicId/posts/new", () => {
+
+    it("should not render a new post form", (done) => {
+        request.get(`${base}/${this.topic.id}/posts/new`, (err, res, body) => {
+            expect(body).toContain("Error");
+            done();
+        });
+    });
+  });
+
+  describe("POST /topics/:topicId/posts/create", () => {
+
+
+    it("should not create a new post", (done) => {
+      const options = {
+        url: `${base}/${this.topic.id}/posts/create`,
+        form: {
+
+//#1
+          title: "Watching snow melt",
+          body: "Without a doubt my favoriting things to do besides watching paint dry!"
+        }
+      };
+
+      request.post(options,
+        (err, res, body) => {
+
+//#2
+          Post.findOne({where: {title: "Watching snow melt"}})
+          .then((post) => {
+              expect(post).toBeNull();
+              done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
+        });
+    });
+  });
+
+  describe("GET /topics/:topicId/posts/:id", () => {
+
+    it("should render a view with the selected post", (done) => {
+      request.get(`${base}/${this.topic.id}/posts/${this.post.id}`, (err, res, body) => {
+        expect(err).toBeNull();
+        expect(body).toContain("Snowball Fighting");
+        done();
+      });
+    });
+ });
+
+ describe("POST /topics/:topicId/posts/:id/destroy", () => {
+
+    it("should not delete the post with the associated ID", (done) => {
+
+      expect(this.post.id).toBe(1);
+      request.post(`${base}/${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
+        Post.findById(1)
+        .then((post) => {
+          expect(post).not.toBeNull();
+          done();
+        })
+      });
+
+    });
+
+ });
+
+ describe("GET /topics/:topicId/posts/:id/edit", () => {
+
+    it("should not render a view with an edit post form", (done) => {
+      request.get(`${base}/${this.topic.id}/posts/${this.post.id}/edit`, (err, res, body) => {
+        expect(body).not.toContain("Edit Post");
+        done();
+      });
+    });
+
+  });
+
+  describe("POST /topics/:topicId/posts/:id/update", () => {
+    it("should not return a status code 302", (done) => {
+      request.post({
+        url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
+        form: {
+          title: "Snowman Building Competition",
+          body: "I love watching them melt slowly."
+        }
+      }, (err, res, body) => {
+        expect(res.statusCode).not.toBe(302);
+        done();
+      });
+    });
+  });
+});
+
+
+//define owner/admin user context
+  describe("owner or admin performing CRUD actions for Post", () => {
+
+    beforeEach((done) => {
+       User.create({
+         email: "admin@example.com",
+         password: "123456",
+         role: "admin"
+       })
+       .then((user) => {
+         request.get({         // mock authentication
+           url: "http://localhost:3000/auth/fake",
+           form: {
+             role: user.role,     // mock authenticate as admin user
+             userId: user.id,
+             email: user.email
+           }
+         },
+           (err, res, body) => {
+             done();
+           }
+         );
+       });
+     });
+
+
+
+
+
   describe("GET /topics/:topicId/posts/new", () => {
 
     it("should render a new post form", (done) => {
@@ -60,14 +203,14 @@ describe("routes : posts", () => {
   describe("POST /topics/:topicId/posts/create", () => {
 
 
-    it("should not create a new post that fails validations", (done) => {
+    it("should create a new post and redirect", (done) => {
       const options = {
         url: `${base}/${this.topic.id}/posts/create`,
         form: {
 
 //#1
-          title: "a",
-          body: "b"
+          title: "Watching snow melt",
+          body: "Without a doubt my favoriting things to do besides watching paint dry!"
         }
       };
 
@@ -75,9 +218,12 @@ describe("routes : posts", () => {
         (err, res, body) => {
 
 //#2
-          Post.findOne({where: {title: "a"}})
+          Post.findOne({where: {title: "Watching snow melt"}})
           .then((post) => {
-              expect(post).toBeNull();
+              expect(post).not.toBeNull();
+              expect(post.title).toBe("Watching snow melt");
+              expect(post.body).toBe("Without a doubt my favoriting things to do besides watching paint dry!");
+              expect(post.topicId).not.toBeNull();
               done();
           })
           .catch((err) => {
@@ -87,23 +233,19 @@ describe("routes : posts", () => {
         });
     });
 
-    it("should create a new post and redirect", (done) => {
+    it("should not create a new post that fails validations", (done) => {
         const options = {
             url: `${base}/${this.topic.id}/posts/create`,
             form: {
-                title: "Watching snow melt",
-                body: "Without a doubt my favorite thing to do besides watching paint dry!",
-                userId: this.user.id
+                title: "a",
+                body: "b"
             }
         };
         request.post(options,
         (err, res, body) => {
-            Post.findOne({where: {title: "Watching snow melt"}})
+            Post.findOne({where: {title: "a"}})
             .then((post) => {
-                expect(post).not.toBeNull();
-                expect(post.title).toBe("Watching snow melt");
-                expect(post.body).toBe("Without a doubt my favorite thing to do besides watching paint dry!");
-                expect(post.topicId).not.toBeNull();
+                expect(post).toBeNull();
                 done();
             })
             .catch((err) => {
@@ -169,7 +311,7 @@ describe("routes : posts", () => {
         done();
       });
     });
-
+/*
     it("should update the post with the given values", (done) => {
         const options = {
           url: `${base}/${this.topic.id}/posts/${this.post.id}/update`,
@@ -187,9 +329,9 @@ describe("routes : posts", () => {
             expect(post.title).toBe("Snowball Fighting");
             done();
           });
-        });
+        }); */
     });
 
-  });
+  }); //end context of member/admin user
 
 });
