@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
        onDelete: "CASCADE"
      });
 
+     Post.hasMany(models.Vote, {
+       foreignKey: "postId",
+       as: "votes"
+     });
+
     Post.hasMany(models.Comment, {
     foreignKey: "postId",
     as: "comments"
@@ -39,5 +44,17 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   };
+
+  Post.prototype.getPoints = function(){
+
+// #1
+    if(this.votes.length === 0) return 0
+
+// #2
+    return this.votes
+      .map((v) => { return v.value })
+      .reduce((prev, next) => { return prev + next });
+  };
+  
   return Post;
 };
