@@ -4,7 +4,7 @@ module.exports = class PostPolicy extends ApplicationPolicy {
 
  // #2
   new() {
-    return this._isMember();// changed from isAdmin
+    return (this._isMember() || this._isAdmin());
   }
 
   create() {
@@ -13,7 +13,7 @@ module.exports = class PostPolicy extends ApplicationPolicy {
 
  // #3
   edit() {
-    return this._isOwner();
+    return (this._isOwner() || this._isAdmin());
   }
 
   update() {

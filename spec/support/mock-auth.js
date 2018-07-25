@@ -14,6 +14,7 @@ module.exports = {
       email = req.body.email || email;
 
 // #5
+    //console.log('role', role, 'id', id, req.body);
       if(id && id != 0){
         req.user = {
           "id": id,

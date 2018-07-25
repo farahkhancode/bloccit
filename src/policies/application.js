@@ -7,7 +7,12 @@ module.exports = class ApplicationPolicy {
   }
 
  // #2
+  _isMember() {
+   return this.user && this.user.role == "member";
+ }
+
   _isOwner() {
+    //console.log('_isOwner', this.record.userId, this.user.id);
     return this.record && (this.record.userId == this.user.id);
   }
 
