@@ -262,6 +262,7 @@ describe("Vote", () => {
         this.comment.getPost()
         .then((associatedPost) => {
           expect(associatedPost.title).toBe("My first visit to Proxima Centauri b");
+
           done();
         });
       })
@@ -272,7 +273,7 @@ describe("Vote", () => {
     });
 
   });
-
+/*
   describe("#getPoints()", () => {
 
             it("should return count of all the votes for a post", (done) => {
@@ -284,6 +285,7 @@ describe("Vote", () => {
               .then((votes) => {
                 let points = this.post.getPoints();
                 expect(points).toBe(1);
+
                 done();
               })
               .catch((err) => {
@@ -336,5 +338,5 @@ describe("Vote", () => {
                     });
                   });
 
-
+*/
 });
