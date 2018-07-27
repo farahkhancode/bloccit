@@ -295,7 +295,7 @@ describe("Vote", () => {
             });
 
           });
-
+/*
   describe("#hasUpvoteFor()", () => {
       it("should return true if the associated user has an upvote", (done) => {
                 Vote.create({
