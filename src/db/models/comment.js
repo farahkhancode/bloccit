@@ -14,18 +14,31 @@ module.exports = (sequelize, DataTypes) => {
      allowNull: false
    }
   }, {});
-  Comment.associate = function(models) {
+Comment.associate = function(models) {
 
     Comment.belongsTo(models.Post, {
         foreignKey: "postId",
         onDelete: "CASCADE"
       });
 
-      Comment.belongsTo(models.User, {
+  Comment.belongsTo(models.User, {
         foreignKey: "userId",
         onDelete: "CASCADE"
       });
-    
+  Comment.addScope("lastFiveFor", (userId) => {
+
+// #1
+    return {
+      include: [{
+        model: models.Post
+      }],
+      where: { userId: userId},
+
+      limit: 5,
+      order: [["createdAt", "DESC"]]
+    }
+  });
+
   };
   return Comment;
 };
