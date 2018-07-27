@@ -85,7 +85,7 @@ describe("routes : votes", () => {
                 }
               })
               .then((vote) => {
-                expect(vote).toBeNull();
+                expect(vote).not.toBeNull();
                 done();
               })
               .catch((err) => {

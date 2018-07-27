@@ -80,7 +80,7 @@ describe("Favorite", () => {
   // #4
           expect(favorite.postId).toBe(this.post.id);
           expect(favorite.userId).toBe(this.user.id);
-        
+
           done();
 
         })
